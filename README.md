@@ -3,9 +3,9 @@
 ## .env file
 
 ```
-MQTT_HOST=`your mqtt host`
-MQTT_USERNAME=`your mqtt username`
-MQTT_PASS=`your mqtt password`
+MQTT_HOST={your mqtt host}
+MQTT_USERNAME={your mqtt username}
+MQTT_PASS={your mqtt password}
 ```
 
 ## File Structure
