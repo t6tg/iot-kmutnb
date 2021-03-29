@@ -19,6 +19,7 @@ MQTT_PASS=`your mqtt password`
 - yarn.lock ( lock version of dependencies )
 - .vscode ( config visual studio code )
     - setting.json
+- dashboard ( client-side )
 ```
 
 ## IOT and Software Architecture
