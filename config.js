@@ -3,10 +3,8 @@ require('dotenv').config()
 
 var options = {
     host: process.env.MQTT_HOST,
-    port: 8883,
-    protocol: 'mqtts',
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASS,
+    port: 1883,
+    protocol: 'tcp',
 }
 
 const client = mqtt.connect(options)
