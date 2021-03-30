@@ -1,12 +1,12 @@
 const mqtt = require('mqtt')
 require('dotenv').config()
 
-var options = {
+const options = {
     host: process.env.MQTT_HOST,
     port: 1883,
     protocol: 'tcp',
 }
-
+// retain: true,
 const client = mqtt.connect(options)
 
 client.on('connect', () => {
