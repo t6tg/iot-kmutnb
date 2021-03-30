@@ -6,7 +6,7 @@ client.on('message', (topic, payload, packet) => {
     const date = Date.now()
     if (topic === 'kmutnb-iot-2563-project/temp') {
         temp = parseFloat(payload)
-        db.collection('temp').add({
+        db.collection('temp').doc(date.toString()).set({
             temperature: temp,
             timestamp: date,
         })
@@ -23,7 +23,7 @@ client.on('message', (topic, payload, packet) => {
             })
         } else {
             client.publish('kmutnb-iot-2563-project/fanSwitch', 'OFF', () => {
-                db.collection('fan').add({
+                db.collection('fan').doc(date.toString()).set({
                     system: 'OFF',
                     timestamp: date,
                 })

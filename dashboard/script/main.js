@@ -7,12 +7,48 @@ var app = firebase.initializeApp({
     appId: '1:945437931517:web:7272957d6f364df69e8b94',
     measurementId: 'G-MC011V3DL9',
 })
-
 const db = firebase.firestore()
-db.collection('temp')
-    .get()
-    .then((r) => {
-        r.forEach((d) => {
-            console.log(d.data())
-        })
-    })
+
+new Vue({
+    el: '#root',
+    data: {
+        temp: '',
+        fanStatus: '',
+    },
+    mounted() {
+        db
+            .collection('temp')
+            .get()
+            .then((r) => {
+                r.forEach((d) => {
+                    this.temp = `อุณหภูมิ (ล่าสุด) : ${d.data().temperature}`
+                })
+            }),
+            db
+                .collection('fan')
+                .get()
+                .then((r) => {
+                    r.forEach((d) => {
+                        this.fanStatus = `สถาณะพัดลม : ${d.data().system}`
+                    })
+                })
+    },
+    updated: function () {
+        db
+            .collection('temp')
+            .get()
+            .then((r) => {
+                r.forEach((d) => {
+                    this.temp = `อุณหภูมิ (ล่าสุด) : ${d.data().temperature}`
+                })
+            }),
+            db
+                .collection('fan')
+                .get()
+                .then((r) => {
+                    r.forEach((d) => {
+                        this.fanStatus = `สถาณะพัดลม : ${d.data().system}`
+                    })
+                })
+    },
+})
