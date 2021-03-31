@@ -1,0 +1,10 @@
+html,
+body {
+    font-family: 'Prompt', sans-serif;
+}
+h1,
+h2,
+h3 {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 800;
+}

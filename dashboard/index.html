@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ระบบรายงานอุณหภูมิภายในห้องและระบายความร้อน</title>
+        <link rel="stylesheet" href="./style/main.css" />
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -21,10 +22,41 @@
             integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
             crossorigin="anonymous"
         ></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     </head>
     <body>
-        <div class="root"></div>
-        <script src="./key.json"></script>
+        <div class="mx-auto" id="root">
+            <div class="container">
+                <div class="bg-primary text-center rounded p-4 my-4">
+                    <h1 class="text-white">
+                        ระบบรายงานอุณหภูมิภายในห้องและระบายความร้อน
+                    </h1>
+                </div>
+                <div class="row gap-3">
+                    <div class="col-md bg-success rounded p-3">
+                        <h3 id="fanStatus" class="text-white my-auto">
+                            สถาณะพัดลม : {{ fanStatus }}
+                        </h3>
+                    </div>
+                    <div class="col-md bg-info rounded p-3">
+                        <h3 id="temp" class="text-white my-auto">
+                            อุณหภูมิ (ล่าสุด) : {{ temp }}
+                        </h3>
+                    </div>
+                </div>
+                <div
+                    id="chartContainer"
+                    class="my-5"
+                    style="height: 360px; width: 100%"
+                ></div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase.js"></script>
         <script src="./script/main.js" charset="UTF-8"></script>
     </body>
