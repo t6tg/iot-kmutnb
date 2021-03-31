@@ -12,43 +12,104 @@ const db = firebase.firestore()
 new Vue({
     el: '#root',
     data: {
+        temps: [],
+        fanStatusS: [],
         temp: '',
         fanStatus: '',
+        chartOptions: {
+            title: {
+                text: 'Temperature Data',
+            },
+            axisX: {
+                title: 'Time',
+            },
+            axisY: {
+                title: 'Temperature',
+                suffix: 'C.',
+                includeZero: true,
+            },
+            data: [
+                {
+                    type: 'line',
+                    name: 'Temperature Date',
+                    connectNullData: true,
+                    xValueType: 'dateTime',
+                    xValueFormatString: 'DD MMM hh:mm:ss TT',
+                    yValueFormatString: '#,##0.##"C."',
+                    dataPoints: null,
+                    color: 'hotpink',
+                },
+            ],
+        },
+        chart: null,
     },
-    mounted() {
+    mounted: function () {
         db
             .collection('temp')
+            .orderBy('timestamp', 'desc')
+            .limit(5)
             .get()
             .then((r) => {
                 r.forEach((d) => {
-                    this.temp = `อุณหภูมิ (ล่าสุด) : ${d.data().temperature}`
+                    this.temps.push({
+                        x: d.data().timestamp,
+                        y: d.data().temperature,
+                    })
+                    this.temp = `${this.temps[this.temps.length - 1].y}`
                 })
             }),
             db
                 .collection('fan')
+                .orderBy('timestamp', 'desc')
+                .limit(5)
                 .get()
                 .then((r) => {
                     r.forEach((d) => {
-                        this.fanStatus = `สถาณะพัดลม : ${d.data().system}`
+                        this.fanStatusS.push({
+                            x: d.data().timestamp,
+                            y: d.data().system,
+                        })
+                        this.fanStatus = `${
+                            this.fanStatusS[this.fanStatusS.length - 1].y
+                        }`
                     })
                 })
     },
     updated: function () {
-        db
-            .collection('temp')
-            .get()
-            .then((r) => {
-                r.forEach((d) => {
-                    this.temp = `อุณหภูมิ (ล่าสุด) : ${d.data().temperature}`
-                })
-            }),
+        this.chart = new CanvasJS.Chart('chartContainer', this.chartOptions)
+        this.chart.render()
+        this.chartOptions.data[0].dataPoints = this.temps
+        setInterval(() => {
             db
-                .collection('fan')
+                .collection('temp')
+                .orderBy('timestamp', 'desc')
+                .limit(1)
                 .get()
                 .then((r) => {
                     r.forEach((d) => {
-                        this.fanStatus = `สถาณะพัดลม : ${d.data().system}`
+                        this.temps.push({
+                            x: d.data().timestamp,
+                            y: d.data().temperature,
+                        })
+                        this.temp = `${this.temps[this.temps.length - 1].y}`
                     })
-                })
+                }),
+                db
+                    .collection('fan')
+                    .orderBy('timestamp', 'desc')
+                    .limit(1)
+                    .get()
+                    .then((r) => {
+                        r.forEach((d) => {
+                            this.fanStatusS.push({
+                                x: d.data().timestamp,
+                                y: d.data().system,
+                            })
+                            this.fanStatus = `${
+                                this.fanStatusS[this.fanStatusS.length - 1].y
+                            }`
+                        })
+                    })
+        }, 12000)
     },
 })

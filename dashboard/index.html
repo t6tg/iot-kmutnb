@@ -40,15 +40,23 @@
                 <div class="row gap-3">
                     <div class="col-md bg-success rounded p-3">
                         <h3 id="fanStatus" class="text-white my-auto">
-                            {{ fanStatus }}
+                            สถาณะพัดลม : {{ fanStatus }}
                         </h3>
                     </div>
                     <div class="col-md bg-info rounded p-3">
-                        <h3 id="temp" class="text-white my-auto">{{ temp }}</h3>
+                        <h3 id="temp" class="text-white my-auto">
+                            อุณหภูมิ (ล่าสุด) : {{ temp }}
+                        </h3>
                     </div>
                 </div>
+                <div
+                    id="chartContainer"
+                    class="my-5"
+                    style="height: 360px; width: 100%"
+                ></div>
             </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase.js"></script>
         <script src="./script/main.js" charset="UTF-8"></script>
     </body>
