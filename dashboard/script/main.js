@@ -44,6 +44,7 @@ new Vue({
         chart: null,
     },
     mounted: function () {
+        this.chart = new CanvasJS.Chart('chartContainer', this.chartOptions)
         db
             .collection('temp')
             .orderBy('timestamp', 'desc')
@@ -61,7 +62,7 @@ new Vue({
             db
                 .collection('fan')
                 .orderBy('timestamp', 'desc')
-                .limit(5)
+                .limit(1)
                 .get()
                 .then((r) => {
                     r.forEach((d) => {
@@ -74,11 +75,10 @@ new Vue({
                         }`
                     })
                 })
+        this.chartOptions.data[0].dataPoints = this.temps
     },
     updated: function () {
-        this.chart = new CanvasJS.Chart('chartContainer', this.chartOptions)
         this.chart.render()
-        this.chartOptions.data[0].dataPoints = this.temps
         setInterval(() => {
             db
                 .collection('temp')
