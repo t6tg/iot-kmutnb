@@ -6,19 +6,28 @@ client.on('message', (topic, payload, packet) => {
     const date = Date.now()
     if (topic === 'kmutnb-iot-2563-project/temp') {
         temp = parseFloat(payload)
-        db.collection('temp').doc(date.toString()).set({
-            temperature: temp,
-            timestamp: date,
-        })
+        db.collection('temp')
+            .doc(date.toString())
+            .set({
+                temperature: temp,
+                timestamp: date,
+            })
+            .catch((err) => {
+                console.error(err)
+            })
         console.log(`Temp = ${parseFloat(payload)}`)
     }
     if (topic === 'kmutnb-iot-2563-project/fanStatus') {
         if (temp > 35) {
             client.publish('kmutnb-iot-2563-project/fanSwitch', 'ON', () => {
-                db.collection('fan').add({
-                    system: 'ON',
-                    timestamp: date,
-                })
+                db.collection('fan')
+                    .add({
+                        system: 'ON',
+                        timestamp: date,
+                    })
+                    .catch((err) => {
+                        console.error(err)
+                    })
                 console.log(`Publish successful 🎉`)
             })
         } else {
