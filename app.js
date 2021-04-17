@@ -1,5 +1,7 @@
 const client = require('./config')
 const db = require('./firebase')
+const TOKEN = 'vugtIDq7Q1rUj78UM3Au7bkjk9E0SdvHwVgQRlAXHnL'
+const lineNotify = require('line-notify-nodejs')(TOKEN)
 
 let temp
 client.on('message', (topic, payload, packet) => {
@@ -18,7 +20,7 @@ client.on('message', (topic, payload, packet) => {
         console.log(`Temp = ${parseFloat(payload)}`)
     }
     if (topic === 'kmutnb-iot-2563-project/fanStatus') {
-        if (temp > 38) {
+        if (temp > 35) {
             if (payload.toString() === 'OFF') {
                 client.publish(
                     'kmutnb-iot-2563-project/fanSwitch',
@@ -31,6 +33,13 @@ client.on('message', (topic, payload, packet) => {
                             })
                             .catch((err) => {
                                 console.error(err)
+                            })
+                        lineNotify
+                            .notify({
+                                message: `\n🔥 Temp = ${temp} \n🟢 Fan Status = ON`,
+                            })
+                            .then(() => {
+                                console.log('Send Complete')
                             })
                         console.log(`Turn ON 🟢`)
                     }
@@ -46,6 +55,13 @@ client.on('message', (topic, payload, packet) => {
                             system: 'OFF',
                             timestamp: date,
                         })
+                        lineNotify
+                            .notify({
+                                message: `\n🥶 Temp = ${temp} \n🔴 Fan Status = OFF`,
+                            })
+                            .then(() => {
+                                console.log('Send Complete')
+                            })
                         console.log(`Turn OFF 🔴`)
                     }
                 )
