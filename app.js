@@ -1,5 +1,7 @@
 const client = require('./config')
 const db = require('./firebase')
+const TOKEN = 'g0rdDIx8YDOvmV7xewGddHMssy2URxgBL9Yx0b7pb7P'
+const lineNotify = require('line-notify-nodejs')(TOKEN)
 
 let temp
 client.on('message', (topic, payload, packet) => {
@@ -19,25 +21,51 @@ client.on('message', (topic, payload, packet) => {
     }
     if (topic === 'kmutnb-iot-2563-project/fanStatus') {
         if (temp > 35) {
-            client.publish('kmutnb-iot-2563-project/fanSwitch', 'ON', () => {
-                db.collection('fan')
-                    .add({
-                        system: 'ON',
-                        timestamp: date,
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                    })
-                console.log(`Publish successful 🎉`)
-            })
+            if (payload.toString() === 'OFF') {
+                client.publish(
+                    'kmutnb-iot-2563-project/fanSwitch',
+                    'ON',
+                    () => {
+                        db.collection('fan')
+                            .add({
+                                system: 'ON',
+                                timestamp: date,
+                            })
+                            .catch((err) => {
+                                console.error(err)
+                            })
+                        lineNotify
+                            .notify({
+                                message: `\n🔥 Temp = ${temp} \n🟢 Fan Status = ON`,
+                            })
+                            .then(() => {
+                                console.log('Send Complete')
+                            })
+                        console.log(`Turn ON 🟢`)
+                    }
+                )
+            }
         } else {
-            client.publish('kmutnb-iot-2563-project/fanSwitch', 'OFF', () => {
-                db.collection('fan').doc(date.toString()).set({
-                    system: 'OFF',
-                    timestamp: date,
-                })
-                console.log(`Publish successful 🎉`)
-            })
+            if (payload.toString() === 'ON') {
+                client.publish(
+                    'kmutnb-iot-2563-project/fanSwitch',
+                    'OFF',
+                    () => {
+                        db.collection('fan').doc(date.toString()).set({
+                            system: 'OFF',
+                            timestamp: date,
+                        })
+                        lineNotify
+                            .notify({
+                                message: `\n🥶 Temp = ${temp} \n🔴 Fan Status = OFF`,
+                            })
+                            .then(() => {
+                                console.log('Send Complete')
+                            })
+                        console.log(`Turn OFF 🔴`)
+                    }
+                )
+            }
         }
         console.log(`Now Fan : ${payload}.....🛠`)
     }
