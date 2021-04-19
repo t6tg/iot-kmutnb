@@ -1,6 +1,6 @@
 const client = require('./config')
 const db = require('./firebase')
-const TOKEN = 'vugtIDq7Q1rUj78UM3Au7bkjk9E0SdvHwVgQRlAXHnL'
+const TOKEN = 'g0rdDIx8YDOvmV7xewGddHMssy2URxgBL9Yx0b7pb7P'
 const lineNotify = require('line-notify-nodejs')(TOKEN)
 
 let temp
